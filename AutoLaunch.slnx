@@ -1,0 +1,8 @@
+﻿<Solution>
+  <Folder Name="/files/">
+    <File Path="README.md" />
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
+  </Folder>
+  <Project Path="src\AutoLaunch\AutoLaunch.csproj" Type="Classic C#" />
+</Solution>
