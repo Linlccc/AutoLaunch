@@ -43,6 +43,14 @@ public sealed class AutoLaunchBuilder
         return this;
     }
 
+    /// <summary>
+    /// Sets the arguments for the auto-launch item.
+    /// </summary>
+    /// <param name="args">The arguments to set.</param>
+    /// <returns>Returns the current <see cref="AutoLaunchBuilder"/> instance.</returns>
+    /// <remarks>
+    /// Only --hidden and --minimized arguments are effective in the <see cref="MacOSEngine.AppleScript">AppleScript</see> engine.
+    /// </remarks>
     public AutoLaunchBuilder SetArgs(params IEnumerable<string> args)
     {
         _args = args.ToList();
@@ -64,10 +72,10 @@ public sealed class AutoLaunchBuilder
     /// <remarks>
     /// Only effective when using the following engines:
     /// <list type="table">
-    /// <item><see cref="WindowsEngine.Registry"/></item>
-    /// <item><see cref="WindowsEngine.StartupFolder"/></item>
-    /// <item><see cref="LinuxEngine.Freedesktop"/></item>
-    /// <item><see cref="MacOSEngine.LaunchAgent"/></item>
+    ///     <item><see cref="WindowsEngine.Registry"/></item>
+    ///     <item><see cref="WindowsEngine.StartupFolder"/></item>
+    ///     <item><see cref="LinuxEngine.Freedesktop"/></item>
+    ///     <item><see cref="MacOSEngine.LaunchAgent"/></item>
     /// </list>
     /// Using <see cref="WorkScope.AllUser"/> may require elevated system privileges.
     /// </remarks>
@@ -95,6 +103,17 @@ public sealed class AutoLaunchBuilder
         return this;
     }
 
+    /// <summary>
+    /// Sets the identifiers for the auto-launch item.
+    /// </summary>
+    /// <param name="identifiers">The identifiers to set.</param>
+    /// <returns>Returns the current <see cref="AutoLaunchBuilder"/> instance.</returns>
+    /// <remarks>
+    /// Only effective when using the following engines:
+    /// <list type="table">
+    ///     <item><see cref="MacOSEngine.LaunchAgent"/></item>
+    /// </list>
+    /// </remarks>
     public AutoLaunchBuilder SetIdentifiers(params IEnumerable<string> identifiers)
     {
         _identifiers = identifiers.ToList();
@@ -116,8 +135,8 @@ public sealed class AutoLaunchBuilder
     /// <remarks>
     /// Only effective when using the following engines:
     /// <list type="table">
-    /// <item><see cref="MacOSEngine.LaunchAgent"/></item>
-    /// <item><see cref="LinuxEngine.Freedesktop"/></item>
+    ///     <item><see cref="MacOSEngine.LaunchAgent"/></item>
+    ///     <item><see cref="LinuxEngine.Freedesktop"/></item>
     /// </list>
     /// The format of the extra configuration should comply with the specifications of the respective engine.
     /// </remarks>

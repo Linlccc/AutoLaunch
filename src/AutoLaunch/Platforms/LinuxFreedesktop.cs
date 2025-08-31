@@ -6,7 +6,7 @@ namespace AutoLaunch.Platforms;
 internal sealed partial class LinuxFreedesktop(string appName, string appPath, ReadOnlyCollection<string> args, WorkScope workScope, string? extraConfig) : AutoLauncher
 {
     private static readonly string _curUserAutoStartDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".config", "autostart");
-    private static readonly string _allUserAutoStartDir = Path.Combine("etc", "xdg", "autostart");
+    private static readonly string _allUserAutoStartDir = Path.Combine(Path.DirectorySeparatorChar.ToString(), "etc", "xdg", "autostart");
 
     private readonly string _useAutoStartDir = workScope == WorkScope.CurrentUser ? _curUserAutoStartDir : _allUserAutoStartDir;
     private string AutoStartFile => Path.Combine(_useAutoStartDir, $"{appName}.desktop");
@@ -27,7 +27,7 @@ internal sealed partial class LinuxFreedesktop(string appName, string appPath, R
                                                [Desktop Entry]
                                                Type=Application
                                                Name={appName}
-                                               Exec={appPath} {string.Join(" ", args)}
+                                               Exec={ArgumentEx.EscapeArguments([appPath, ..args])}
                                                StartupNotify=false
                                                Terminal=false
                                                Comment={appName} startup
