@@ -1,7 +1,4 @@
-using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
-using AutoLaunch.Compatibility;
-using AutoLaunch.Exceptions;
 
 namespace AutoLaunch.Platforms;
 

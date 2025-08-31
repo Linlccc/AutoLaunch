@@ -1,6 +1,3 @@
-using System.Diagnostics;
-using AutoLaunch.Compatibility;
-
 namespace AutoLaunch.Extensions;
 
 internal readonly struct ProcessResult(int exitCode, string output, string error)

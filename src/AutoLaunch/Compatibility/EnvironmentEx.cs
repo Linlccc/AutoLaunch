@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 namespace AutoLaunch.Compatibility;
 
 internal static class EnvironmentEx

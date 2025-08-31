@@ -1,6 +1,3 @@
-using System.Collections.ObjectModel;
-using AutoLaunch.Compatibility;
-
 namespace AutoLaunch.Platforms;
 
 #if NET5_0_OR_GREATER

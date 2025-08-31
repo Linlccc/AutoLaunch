@@ -1,5 +1,3 @@
-using System.Collections.ObjectModel;
-using AutoLaunch.Exceptions;
 using Microsoft.Win32;
 
 namespace AutoLaunch.Platforms;

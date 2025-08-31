@@ -1,5 +1,3 @@
-using AutoLaunch.Platforms;
-
 namespace AutoLaunch;
 
 public abstract class AutoLauncher : IAutoLauncher, IAsyncAutoLauncher
