@@ -8,7 +8,7 @@ namespace AutoLaunch.Platforms;
 internal sealed partial class MacOSLaunchAgent(string appName, string appPath, ReadOnlyCollection<string> args, WorkScope workScope, ReadOnlyCollection<string>? identifiers, string? extraConfig) : AutoLauncher
 {
     private static readonly string _curUserLaunchAgentsDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library", "LaunchAgents");
-    private static readonly string _allUserLaunchAgentsDir = Path.Combine("Library", "LaunchAgents");
+    private static readonly string _allUserLaunchAgentsDir = Path.Combine(Path.DirectorySeparatorChar.ToString(), "Library", "LaunchAgents");
 
     private readonly string _useLaunchAgentsDir = workScope == WorkScope.CurrentUser ? _curUserLaunchAgentsDir : _allUserLaunchAgentsDir;
     private string LaunchAgentFile => Path.Combine(_useLaunchAgentsDir, $"{identifiers?.FirstOrDefault() ?? appName}.plist");
