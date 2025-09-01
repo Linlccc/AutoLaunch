@@ -13,3 +13,5 @@ public class ExecuteCommandException : AutoLaunchException
 
     public int? ExitCode { get; }
 }
+
+public class PermissionDeniedException(string message, Exception? ex = null) : AutoLaunchException(message, ex);
