@@ -41,6 +41,7 @@ internal static class ProcessEx
         using Process process = new();
         process.StartInfo = startInfo;
 
+        process.Start();
         string output = await process.StandardOutput.ReadToEndAsync();
         string error = await process.StandardError.ReadToEndAsync();
 #if NETSTANDARD2_0_OR_GREATER
