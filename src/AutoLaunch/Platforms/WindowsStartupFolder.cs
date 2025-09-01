@@ -24,8 +24,8 @@ internal sealed partial class WindowsStartupFolder(string appName, string appPat
                                              @echo off
                                              REM Auto-generated batch file for auto-launch
                                              cd /d "{Path.GetDirectoryName(appPath)}"
-                                             REM start : start "title" /d "exeFolder" "exePath" "arg1" "arg2" ...
-                                             start "{appName}" /d "{Path.GetDirectoryName(appPath)}" "{appPath}" {string.Join(" ", args.Select(arg => $"\"{arg}\""))}
+                                             REM start : start "title" /d "exeFolder" "exePath" "arg1" arg2 ...
+                                             start "{appName}" /d "{Path.GetDirectoryName(appPath)}" "{appPath}" {ArgumentEx.EscapeArguments(args)}
                                              exit
                                              """;
     #endregion
