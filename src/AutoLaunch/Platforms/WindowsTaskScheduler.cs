@@ -8,7 +8,6 @@ internal sealed partial class WindowsTaskScheduler(string appName, string appPat
     private const string _taskName = "AutoLaunch for $env:USERNAME";
 
     private readonly string _taskBaseInfo = $"""-TaskPath "\{appName}\" -TaskName "{_taskName}" """;
-    private readonly string _taskExecInfo = $"""-Execute "{appPath}" -Argument "{string.Join(" ", args)}" """;
 
     public override void Enable() => Exec(GetEnableCmd());
     public override void Disable() => Exec(GetDisableCmd());
@@ -16,9 +15,14 @@ internal sealed partial class WindowsTaskScheduler(string appName, string appPat
 
 
     #region private method
-    private string GetEnableCmd() => $"Register-ScheduledTask -Force -RunLevel Highest -Trigger (New-ScheduledTaskTrigger -AtLogOn -User $env:USERNAME) {_taskBaseInfo} -Action (New-ScheduledTaskAction {_taskExecInfo})";
-    private string GetDisableCmd() => $"Unregister-ScheduledTask {_taskBaseInfo} -Confirm:$false";
+    private string GetEnableCmd()
+    {
+        string argument = args.Count == 0 ? string.Empty : $"""-Argument "{string.Join(" ", args)}" """;
+        return $"""Register-ScheduledTask -Force -RunLevel Highest -Trigger (New-ScheduledTaskTrigger -AtLogOn -User $env:USERNAME) {_taskBaseInfo} -Action (New-ScheduledTaskAction -Execute "{appPath}" {argument}) -Description "Auto launch {appName} at user logon" """;
+    }
+    private string GetDisableCmd() => $$"""if({{GetIsEnabledCmd()}}) {{{GetUnregister()}}}""";
     private string GetIsEnabledCmd() => $"(Get-ScheduledTask {_taskBaseInfo} -ErrorAction SilentlyContinue) -ne $null";
+    private string GetUnregister() => $"Unregister-ScheduledTask {_taskBaseInfo} -Confirm:$false";
 
     private static string Exec(string cmd)
     {
