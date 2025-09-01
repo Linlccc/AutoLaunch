@@ -4,11 +4,12 @@ namespace AutoLaunch.Compatibility;
 
 internal static class ArgumentEx
 {
-    internal static string EscapeArguments(string[] args)
+    internal static string EscapeArguments(params IEnumerable<string>? args)
     {
-        if (args is not { Length: > 0 }) return string.Empty;
+        string[] arguments = args as string[] ?? args?.ToArray() ?? [];
+        if (arguments.Length == 0) return string.Empty;
         StringBuilder sb = new();
-        foreach (string argument in args) PasteArguments.AppendArgument(sb, argument);
+        foreach (string argument in arguments) PasteArguments.AppendArgument(sb, argument);
         return sb.ToString();
     }
 }
