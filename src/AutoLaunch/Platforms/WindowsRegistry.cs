@@ -17,7 +17,7 @@ internal sealed partial class WindowsRegistry(string appName, string appPath, Re
         try
         {
             using RegistryKey runKey = _useRegRoot.CreateSubKey(_runRegPath, true);
-            runKey.SetValue(appName, $"\"{appPath}\" {string.Join(" ", args)}");
+            runKey.SetValue(appName, ArgumentEx.EscapeArguments([appPath, ..args]));
 
             using RegistryKey startupApprovedKey = _useRegRoot.CreateSubKey(_startupApprovedRegPath, true);
             startupApprovedKey.SetValue(appName, new byte[] { 2, 0, 0, 0, 0, 0, 0, 0 }, RegistryValueKind.Binary);
