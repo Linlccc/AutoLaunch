@@ -15,20 +15,22 @@
         <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
         <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net7.0'))">true</IsAotCompatible>
-
         <UseArtifactsOutput>true</UseArtifactsOutput>
     </PropertyGroup>
 
     <PropertyGroup>
         <version>1.0.0-preview.1</version>
+        <PackageTags>autolaunch autostart</PackageTags>
+        <PackageProjectUrl>https://github.com/Linlccc/AutoLaunch</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Linlccc/AutoLaunch</RepositoryUrl>
+        <Description>AutoLaunch provides a cross-platform feature for automatically launching applications or executable files at login, suitable for .NET.</Description>
 
         <PackageId>$(AssemblyName)</PackageId>
-        <PackageTags>autolaunch autostart</PackageTags>
         <PackageReadmeFile Condition="Exists('README.md') Or Exists('$(SlnReadme)')">README.md</PackageReadmeFile>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageProjectUrl>https://github.com/Linlccc/AutoLaunch</PackageProjectUrl>
         <GenerateDocumentationFile>True</GenerateDocumentationFile>
-        <Description>AutoLaunch provides a cross-platform feature for automatically launching applications or executable files at login, suitable for .NET.</Description>
+        <RepositoryType>git</RepositoryType>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
@@ -37,10 +39,6 @@
         <Company>$(Authors)</Company>
         <Product>AutoLaunch</Product>
         <Copyright>(c) 2025 $(Authors)</Copyright>
-
-        <PublishRepositoryUrl>false</PublishRepositoryUrl>
-        <RepositoryUrl>https://github.com/Linlccc/AutoLaunch</RepositoryUrl>
-        <RepositoryType>git</RepositoryType>
     </PropertyGroup>
 
     <ItemGroup>
