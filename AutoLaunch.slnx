@@ -3,6 +3,7 @@
     <File Path="README.md" />
     <File Path=".editorconfig" />
     <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
   </Folder>
   <Project Path="src\AutoLaunch\AutoLaunch.csproj" Type="Classic C#" />
 </Solution>

@@ -1,0 +1,52 @@
+<Project>
+    <PropertyGroup>
+        <!-- Do not import "Directory.Build.props" file into the parent directory -->
+        <ImportDirectoryBuildProps>false</ImportDirectoryBuildProps>
+
+        <!-- Solution directory -->
+        <SlnDir>$(MSBuildThisFileDirectory)</SlnDir>
+        <!-- Solution readme file -->
+        <SlnReadme>$([MSBuild]::NormalizePath($(SlnDir),'README.md'))</SlnReadme>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0;net9.0;net10.0</TargetFrameworks>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+        <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net7.0'))">true</IsAotCompatible>
+
+        <UseArtifactsOutput>true</UseArtifactsOutput>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <version>1.0.0-preview.1</version>
+
+        <PackageId>$(AssemblyName)</PackageId>
+        <PackageTags>autolaunch autostart</PackageTags>
+        <PackageReadmeFile Condition="Exists('README.md') Or Exists('$(SlnReadme)')">README.md</PackageReadmeFile>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/Linlccc/AutoLaunch</PackageProjectUrl>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
+        <Description>AutoLaunch provides a cross-platform feature for automatically launching applications or executable files at login, suitable for .NET.</Description>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+
+        <Authors>Linlccc</Authors>
+        <Company>$(Authors)</Company>
+        <Product>AutoLaunch</Product>
+        <Copyright>(c) 2025 $(Authors)</Copyright>
+
+        <PublishRepositoryUrl>false</PublishRepositoryUrl>
+        <RepositoryUrl>https://github.com/Linlccc/AutoLaunch</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- If there is a readme in the project, add it to the package -->
+        <None Condition="Exists('README.md')" Include="README.md" Pack="true" PackagePath="/"/>
+        <!-- If there is no readme in the project && there is a readme in the solution, link to the project and add it to the package -->
+        <None Condition="!Exists('README.md') And Exists('$(SLNDir)/README.md')" Include="$(SLNDir)/README.md" Link="ROOTREADME.md" Pack="true" PackagePath="/"/>
+    </ItemGroup>
+</Project>
