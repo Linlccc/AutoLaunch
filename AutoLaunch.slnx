@@ -1,9 +1,12 @@
 ﻿<Solution>
-  <Folder Name="/files/">
-    <File Path="README.md" />
-    <File Path=".editorconfig" />
-    <File Path=".gitignore" />
-    <File Path="Directory.Build.props" />
-  </Folder>
-  <Project Path="src\AutoLaunch\AutoLaunch.csproj" Type="Classic C#" />
+    <Folder Name="/files/">
+        <File Path="README.md"/>
+        <File Path=".editorconfig"/>
+        <File Path=".gitignore"/>
+        <File Path="Directory.Build.props"/>
+    </Folder>
+    <Folder Name="/files/github_workflows/">
+        <File Path=".github/workflows/push-nuget.yml"/>
+    </Folder>
+    <Project Path="src\AutoLaunch\AutoLaunch.csproj" Type="Classic C#"/>
 </Solution>

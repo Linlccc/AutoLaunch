@@ -1,0 +1,37 @@
+name: Push NuGet Package
+
+on:
+    push:
+        branches:
+            - master
+        tags:
+            - "v*"
+
+env:
+    DOTNET_VERSION: '10.0.x'
+
+jobs:
+    push-nuget:
+        name: Build,Pack and Push NuGet Package
+        runs-on: ubuntu-latest
+        
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v5
+
+            -   name: Setup .NET
+                uses: actions/setup-dotnet@v4
+                with:
+                    dotnet-version: ${{ env.DOTNET_VERSION }}
+
+            -   name: Restore
+                run: dotnet restore
+
+            -   name: Build
+                run: dotnet build -c Release --no-restore
+
+            -   name: Pack
+                run: dotnet pack -c Release --no-build -o to_push_packs
+
+            -   name: Push to NuGet
+                run: dotnet nuget push to_push_packs/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
