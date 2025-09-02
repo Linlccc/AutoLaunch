@@ -1,0 +1,14 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <linearGradient id="purple" x1="0" x2="1" y1="0" y2="1">
+   <stop stop-color="#512BD4"/>
+   <stop offset="1" stop-color="#6C63FF"/>
+  </linearGradient>
+ </defs>
+ <g class="layer">
+  <title>Layer 1</title>
+  <rect fill="url(#purple)" height="450" id="svg_1" rx="72" width="450" x="31" y="31"/>
+  <text font-style="italic" transform="matrix(1.27296 0 0 0.744361 -47.241 67.0276)" stroke="null" id="svg_2" fill="#fff" font-weight="normal" font-family="Segoe UI, Arial, sans-serif" font-size="40" text-anchor="middle" y="293.47125" x="139.21227">⚡️</text>
+  <text id="svg_3" fill="#fff" font-weight="bold" font-family="Segoe UI, Arial, sans-serif" font-size="115" letter-spacing="8" text-anchor="middle" y="295.75" x="281">NET</text>
+ </g>
+</svg>

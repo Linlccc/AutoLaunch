@@ -7,6 +7,8 @@
         <SlnDir>$(MSBuildThisFileDirectory)</SlnDir>
         <!-- Solution readme file -->
         <SlnReadme>$([MSBuild]::NormalizePath($(SlnDir),'README.md'))</SlnReadme>
+        <!-- icon file -->
+        <IconFile>$([MSBuild]::NormalizePath($(SlnDir),'docs','icon','icon.png'))</IconFile>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -20,6 +22,7 @@
 
     <PropertyGroup>
         <version>1.0.0-preview.1</version>
+        <PackageIcon>icon.png</PackageIcon>
         <PackageTags>autolaunch autostart</PackageTags>
         <PackageProjectUrl>https://github.com/Linlccc/AutoLaunch</PackageProjectUrl>
         <RepositoryUrl>https://github.com/Linlccc/AutoLaunch</RepositoryUrl>
@@ -44,7 +47,9 @@
     <ItemGroup>
         <!-- If there is a readme in the project, add it to the package -->
         <None Condition="Exists('README.md')" Include="README.md" Pack="true" PackagePath="/"/>
-        <!-- If there is no readme in the project && there is a readme in the solution, link to the project and add it to the package -->
-        <None Condition="!Exists('README.md') And Exists('$(SLNDir)/README.md')" Include="$(SLNDir)/README.md" Link="ROOTREADME.md" Pack="true" PackagePath="/"/>
+        <!-- If there is no readme in the project && there is a readme in the solution, add it to the package -->
+        <None Condition="!Exists('README.md') And Exists('$(SlnReadme)')" Include="$(SlnReadme)" Visible="false" Pack="true" PackagePath="/"/>
+        <!-- If there is an icon, add it to the package -->
+        <None Condition="Exists('$(IconFile)')" Include="$(IconFile)" Visible="false" Pack="true" PackagePath="/"/>
     </ItemGroup>
 </Project>
