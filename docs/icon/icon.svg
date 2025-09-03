@@ -1,14 +1,17 @@
-<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
- <defs>
-  <linearGradient id="purple" x1="0" x2="1" y1="0" y2="1">
-   <stop stop-color="#512BD4"/>
-   <stop offset="1" stop-color="#6C63FF"/>
-  </linearGradient>
- </defs>
- <g class="layer">
-  <title>Layer 1</title>
-  <rect fill="url(#purple)" height="450" id="svg_1" rx="72" width="450" x="31" y="31"/>
-  <text font-style="italic" transform="matrix(1.27296 0 0 0.744361 -47.241 67.0276)" stroke="null" id="svg_2" fill="#fff" font-weight="normal" font-family="Segoe UI, Arial, sans-serif" font-size="40" text-anchor="middle" y="293.47125" x="139.21227">⚡️</text>
-  <text id="svg_3" fill="#fff" font-weight="bold" font-family="Segoe UI, Arial, sans-serif" font-size="115" letter-spacing="8" text-anchor="middle" y="295.75" x="281">NET</text>
- </g>
+<svg width="1024" height="1024" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <filter id="svg_2_blur" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="0.5"/>
+        </filter>
+        <linearGradient id="purple" x1="0" x2="1" y1="0" y2="1">
+            <stop stop-color="#512BD4"/>
+            <stop offset="1" stop-color="#6C63FF"/>
+        </linearGradient>
+    </defs>
+    <g class="layer">
+        <title>Layer 1</title>
+        <rect fill="url(#purple)" height="900" id="svg_1" rx="144" width="900" x="62" y="62"/>
+        <path transform="rotate(25.1056 550.792 530.177) translate(-0.00012207 0) scale(2 2)" opacity="0.5" stroke="null" d="m324.82685,22.97217l-36.24907,204.45344l105.45183,0l-210.90366,279.7784l79.08887,-193.69274l-105.45183,0l168.06385,-290.5391l0.00001,0z" fill="#FFD600" id="svg_2" filter="url(#svg_2_blur)"/>
+        <text transform="matrix(1 0 0 1 0 0)" id="svg_3" fill="#fff" font-weight="bold" font-family="Segoe UI, Arial, sans-serif" font-size="300" letter-spacing="16" text-anchor="middle" y="616" x="512">.NET</text>
+    </g>
 </svg>
