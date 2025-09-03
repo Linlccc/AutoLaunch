@@ -1,0 +1,23 @@
+name: 功能请求
+labels: [ "enhancement" ]
+description: 提出你的想法或改进建议
+body:
+    -   type: textarea
+        id: solution
+        attributes:
+            label: 请描述你期望的解决方案
+            description: 清晰简要地描述你希望实现的功能或行为。
+        validations:
+            required: true
+
+    -   type: textarea
+        id: alternatives
+        attributes:
+            label: 你考虑过哪些替代方案？
+            description: 简要说明你考虑过的任何替代解决方案或功能。
+
+    -   type: textarea
+        id: additional
+        attributes:
+            label: 其他补充信息
+            description: 请在此处补充任何与功能请求相关的背景、讨论或截图。

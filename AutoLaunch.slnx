@@ -8,5 +8,12 @@
     <Folder Name="/files/github_workflows/">
         <File Path=".github/workflows/push-nuget.yml"/>
     </Folder>
+    <Folder Name="/files/github_issue_temp/">
+        <File Path=".github/ISSUE_TEMPLATE/bug-report-zh.yml"/>
+        <File Path=".github/ISSUE_TEMPLATE/bug-report.yml"/>
+        <File Path=".github/ISSUE_TEMPLATE/feature-request.yml"/>
+        <File Path=".github/ISSUE_TEMPLATE/feature-request-zh.yml"/>
+    </Folder>
+
     <Project Path="src\AutoLaunch\AutoLaunch.csproj" Type="Classic C#"/>
 </Solution>
