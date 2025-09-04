@@ -21,13 +21,13 @@
     </PropertyGroup>
 
     <PropertyGroup Label="package metadata">
-        <version>1.0.0-preview.1</version>
+        <version>1.0.0-preview.2</version>
         <PackageIcon>icon.png</PackageIcon>
         <PackageTags>autolaunch autostart</PackageTags>
         <PackageProjectUrl>https://github.com/Linlccc/AutoLaunch</PackageProjectUrl>
         <RepositoryUrl>https://github.com/Linlccc/AutoLaunch</RepositoryUrl>
         <Description>AutoLaunch provides a cross-platform feature for automatically launching applications or executable files at login, suitable for .NET.</Description>
-        
+
         <!-- You need to manually set IsPackable in the packaged project to true -->
         <IsPackable>false</IsPackable>
         <Title>$(AssemblyName)</Title>
