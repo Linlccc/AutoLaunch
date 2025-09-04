@@ -156,8 +156,9 @@ public sealed class AutoLaunchBuilder
     [SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "Handled internally")]
     public AutoLauncher Build()
     {
-        if (string.IsNullOrWhiteSpace(_appName)) throw new AutoLaunchBuilderException("Name is required.");
-        if (string.IsNullOrWhiteSpace(_appPath)) throw new AutoLaunchBuilderException("Path is required.");
+        if (string.IsNullOrWhiteSpace(_appName)) throw new AutoLaunchBuilderException("AppName is required.");
+        if (string.IsNullOrWhiteSpace(_appPath)) throw new AutoLaunchBuilderException("AppPath is required.");
+        if (!Path.IsPathRooted(_appPath)) throw new AutoLaunchException($"AppPath '{_appPath}' is not absolute.");
         string appName = _appName!, appPath = _appPath!;
         _args ??= [];
 

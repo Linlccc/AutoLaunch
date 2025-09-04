@@ -2,14 +2,7 @@ using System.Runtime.CompilerServices;
 
 namespace AutoLaunch.Exceptions;
 
-public class AutoLaunchException(string message, Exception? ex = null) : Exception(message, ex)
-{
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void ThrowIfNotAbsolutePath(string path)
-    {
-        if (!Path.IsPathRooted(path)) throw new AutoLaunchException($"path '{path}' is not absolute.");
-    }
-}
+public class AutoLaunchException(string message, Exception? ex = null) : Exception(message, ex);
 
 public class AutoLaunchBuilderException(string message) : AutoLaunchException(message);
 
