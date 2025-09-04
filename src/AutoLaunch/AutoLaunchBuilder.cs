@@ -194,4 +194,6 @@ public sealed class AutoLaunchBuilder
         else throw new UnsupportedOSException();
         return new ExceptionalUnifiedDecorator(platformLauncher);
     }
+
+    public SafeAutoLauncher BuildSafe() => new SafeDecorator(Build());
 }
