@@ -1,0 +1,19 @@
+name: Release
+
+on:
+    push:
+        tags:
+            - "v*"
+
+jobs:
+    create-release:
+        runs-on: ubuntu-latest
+        steps:
+            -   name: 创建 Release
+                uses: softprops/action-gh-release@v2
+                with:
+                    prerelease: ${{ contains(github.ref_name, 'preview') }}
+                    body: |
+                        ## Release Notes
+                        
+                        ## 发布说明
