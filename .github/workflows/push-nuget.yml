@@ -22,14 +22,21 @@ jobs:
                 with:
                     dotnet-version: ${{ env.DOTNET_VERSION }}
 
+            -   name: Get version from tag
+                id: get_version
+                run: echo "PACKAGE_VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+
             -   name: Restore
                 run: dotnet restore
 
             -   name: Build
-                run: dotnet build -c Release --no-restore
+                run: dotnet build -c Release --no-restore -p:Version=$PACKAGE_VERSION
 
             -   name: Pack
-                run: dotnet pack -c Release --no-build -o to_push_packs
+                run: dotnet pack -c Release --no-build -p:Version=$PACKAGE_VERSION -o to_push_packs
 
             -   name: Push to NuGet
                 run: dotnet nuget push to_push_packs/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+
+            -   name: Show pushed packs
+                run: ls -1 to_push_packs
