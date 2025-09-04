@@ -1,5 +1,3 @@
-using System.Runtime.CompilerServices;
-
 namespace AutoLaunch.Platforms;
 
 #if NET5_0_OR_GREATER
@@ -13,25 +11,18 @@ internal sealed partial class MacOSLaunchAgent(string appName, string appPath, R
     private readonly string _useLaunchAgentsDir = workScope == WorkScope.CurrentUser ? _curUserLaunchAgentsDir : _allUserLaunchAgentsDir;
     private string LaunchAgentFile => Path.Combine(_useLaunchAgentsDir, $"{identifiers?.FirstOrDefault() ?? appName}.plist");
 
-    public override void Enable()
+    public override void Enable() => FilterPermissionDenied(() =>
     {
-        ThrowIfNotAbsolutePath();
         if (!Directory.Exists(_useLaunchAgentsDir)) Directory.CreateDirectory(_useLaunchAgentsDir);
         File.WriteAllText(LaunchAgentFile, GetLaunchAgentFileContent());
-    }
-    public override void Disable()
+    });
+    public override void Disable() => FilterPermissionDenied(() =>
     {
         if (File.Exists(LaunchAgentFile)) File.Delete(LaunchAgentFile);
-    }
+    });
     public override bool IsEnabled() => File.Exists(LaunchAgentFile);
 
     #region private method
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private void ThrowIfNotAbsolutePath()
-    {
-        if (!Path.IsPathRooted(appPath)) throw new AutoLaunchException($"App path '{appPath}' is not absolute.");
-    }
-
     private string GetLaunchAgentFileContent()
     {
         string[] programArgs = [appPath, ..args];
@@ -55,21 +46,31 @@ internal sealed partial class MacOSLaunchAgent(string appName, string appPath, R
                 </plist>
                 """;
     }
+
+    private static void FilterPermissionDenied(Action action)
+    {
+        try { action(); }
+        catch (UnauthorizedAccessException ex) { throw new PermissionDeniedException("Permission denied.", ex); }
+    }
+    private static async Task FilterPermissionDeniedAsync(Func<Task> func)
+    {
+        try { await func(); }
+        catch (UnauthorizedAccessException ex) { throw new PermissionDeniedException("Permission denied.", ex); }
+    }
     #endregion
 }
 
 internal sealed partial class MacOSLaunchAgent
 {
-    public override Task EnableAsync()
+    public override Task EnableAsync() => FilterPermissionDeniedAsync(() =>
     {
-        ThrowIfNotAbsolutePath();
         if (!Directory.Exists(_useLaunchAgentsDir)) Directory.CreateDirectory(_useLaunchAgentsDir);
         return FileEx.WriteAllTextAsync(LaunchAgentFile, GetLaunchAgentFileContent());
-    }
-    public override Task DisableAsync()
+    });
+    public override Task DisableAsync() => FilterPermissionDeniedAsync(() =>
     {
         if (File.Exists(LaunchAgentFile)) File.Delete(LaunchAgentFile);
         return Task.CompletedTask;
-    }
+    });
     public override Task<bool> IsEnabledAsync() => Task.FromResult(File.Exists(LaunchAgentFile));
 }
