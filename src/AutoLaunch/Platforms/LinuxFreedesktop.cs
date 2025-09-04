@@ -11,16 +11,16 @@ internal sealed partial class LinuxFreedesktop(string appName, string appPath, R
     private readonly string _useAutoStartDir = workScope == WorkScope.CurrentUser ? _curUserAutoStartDir : _allUserAutoStartDir;
     private string AutoStartFile => Path.Combine(_useAutoStartDir, $"{appName}.desktop");
 
-    public override void Enable()
+    public override void Enable() => PermissionDeniedException.ThrowIfIOPermissionDenied(() =>
     {
         if (!Directory.Exists(_useAutoStartDir)) Directory.CreateDirectory(_useAutoStartDir);
         File.WriteAllText(AutoStartFile, GetDesktopFileContent());
-    }
-    public override void Disable()
+    });
+    public override void Disable() => PermissionDeniedException.ThrowIfIOPermissionDenied(() =>
     {
         if (File.Exists(AutoStartFile)) File.Delete(AutoStartFile);
-    }
-    public override bool IsEnabled() => File.Exists(AutoStartFile);
+    });
+    public override bool IsEnabled() => PermissionDeniedException.ThrowIfIOPermissionDenied(() => File.Exists(AutoStartFile));
 
     #region private method
     private string GetDesktopFileContent() => $"""
@@ -38,15 +38,15 @@ internal sealed partial class LinuxFreedesktop(string appName, string appPath, R
 
 internal sealed partial class LinuxFreedesktop
 {
-    public override Task EnableAsync()
+    public override Task EnableAsync() => PermissionDeniedException.ThrowIfIOPermissionDeniedAsync(() =>
     {
         if (!Directory.Exists(_useAutoStartDir)) Directory.CreateDirectory(_useAutoStartDir);
         return FileEx.WriteAllTextAsync(AutoStartFile, GetDesktopFileContent());
-    }
-    public override Task DisableAsync()
+    });
+    public override Task DisableAsync() => PermissionDeniedException.ThrowIfIOPermissionDeniedAsync(() =>
     {
         if (File.Exists(AutoStartFile)) File.Delete(AutoStartFile);
         return Task.CompletedTask;
-    }
-    public override Task<bool> IsEnabledAsync() => Task.FromResult(File.Exists(AutoStartFile));
+    });
+    public override Task<bool> IsEnabledAsync() => PermissionDeniedException.ThrowIfIOPermissionDeniedAsync(() => Task.FromResult(File.Exists(AutoStartFile)));
 }

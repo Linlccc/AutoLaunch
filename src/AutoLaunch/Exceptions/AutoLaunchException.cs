@@ -1,6 +1,15 @@
+using System.Runtime.CompilerServices;
+
 namespace AutoLaunch.Exceptions;
 
-public class AutoLaunchException(string message, Exception? ex = null) : Exception(message, ex);
+public class AutoLaunchException(string message, Exception? ex = null) : Exception(message, ex)
+{
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void ThrowIfNotAbsolutePath(string path)
+    {
+        if (!Path.IsPathRooted(path)) throw new AutoLaunchException($"path '{path}' is not absolute.");
+    }
+}
 
 public class AutoLaunchBuilderException(string message) : AutoLaunchException(message);
 
@@ -14,4 +23,29 @@ public class ExecuteCommandException : AutoLaunchException
     public int? ExitCode { get; }
 }
 
-public class PermissionDeniedException(string message, Exception? ex = null) : AutoLaunchException(message, ex);
+public class PermissionDeniedException(string message, Exception? ex = null) : AutoLaunchException(message, ex)
+{
+    public PermissionDeniedException(Exception? ex = null) : this("Permission denied.", ex) { }
+
+    internal static void ThrowIfIOPermissionDenied(Action action)
+    {
+        try { action(); }
+        catch (UnauthorizedAccessException ex) { throw new PermissionDeniedException(ex); }
+    }
+    internal static T ThrowIfIOPermissionDenied<T>(Func<T> func)
+    {
+        try { return func(); }
+        catch (UnauthorizedAccessException ex) { throw new PermissionDeniedException(ex); }
+    }
+
+    internal static async Task ThrowIfIOPermissionDeniedAsync(Func<Task> func)
+    {
+        try { await func(); }
+        catch (UnauthorizedAccessException ex) { throw new PermissionDeniedException(ex); }
+    }
+    internal static async Task<T> ThrowIfIOPermissionDeniedAsync<T>(Func<Task<T>> func)
+    {
+        try { return await func(); }
+        catch (UnauthorizedAccessException ex) { throw new PermissionDeniedException(ex); }
+    }
+}
