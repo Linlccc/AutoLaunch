@@ -12,59 +12,38 @@ internal sealed partial class WindowsRegistry(string appName, string appPath, Re
 
     private readonly RegistryKey _useRegRoot = workScope == WorkScope.CurrentUser ? Registry.CurrentUser : Registry.LocalMachine;
 
-    public override void Enable()
+    public override void Enable() => PermissionDeniedException.ThrowIfIOPermissionDenied(() =>
     {
-        try
-        {
-            using RegistryKey runKey = _useRegRoot.CreateSubKey(_runRegPath, true);
-            runKey.SetValue(appName, ArgumentEx.EscapeArguments([appPath, ..args]));
+        using RegistryKey runKey = _useRegRoot.CreateSubKey(_runRegPath, true);
+        runKey.SetValue(appName, ArgumentEx.EscapeArguments([appPath, ..args]));
 
-            using RegistryKey startupApprovedKey = _useRegRoot.CreateSubKey(_startupApprovedRegPath, true);
-            startupApprovedKey.SetValue(appName, new byte[] { 2, 0, 0, 0, 0, 0, 0, 0 }, RegistryValueKind.Binary);
-        }
-        catch (Exception ex)
-        {
-            throw new AutoLaunchException("Enable auto launch via Windows Registry failed.", ex);
-        }
-    }
-    public override void Disable()
+        using RegistryKey startupApprovedKey = _useRegRoot.CreateSubKey(_startupApprovedRegPath, true);
+        startupApprovedKey.SetValue(appName, new byte[] { 2, 0, 0, 0, 0, 0, 0, 0 }, RegistryValueKind.Binary);
+    });
+    public override void Disable() => PermissionDeniedException.ThrowIfIOPermissionDenied(() =>
     {
-        try
-        {
-            using RegistryKey? runKey = _useRegRoot.OpenSubKey(_runRegPath, true);
-            runKey?.DeleteValue(appName, false);
+        using RegistryKey? runKey = _useRegRoot.OpenSubKey(_runRegPath, true);
+        runKey?.DeleteValue(appName, false);
 
-            using RegistryKey? startupApprovedKey = _useRegRoot.OpenSubKey(_startupApprovedRegPath, true);
-            startupApprovedKey?.DeleteValue(appName, false);
-        }
-        catch (Exception ex)
-        {
-            throw new AutoLaunchException("Disable auto launch via Windows Registry failed.", ex);
-        }
-    }
-    public override bool IsEnabled()
+        using RegistryKey? startupApprovedKey = _useRegRoot.OpenSubKey(_startupApprovedRegPath, true);
+        startupApprovedKey?.DeleteValue(appName, false);
+    });
+    public override bool IsEnabled() => PermissionDeniedException.ThrowIfIOPermissionDenied(() =>
     {
-        try
-        {
-            using RegistryKey? runKey = _useRegRoot.OpenSubKey(_runRegPath, false);
-            if (string.IsNullOrWhiteSpace(runKey?.GetValue(appName) as string)) return false;
+        using RegistryKey? runKey = _useRegRoot.OpenSubKey(_runRegPath, false);
+        if (string.IsNullOrWhiteSpace(runKey?.GetValue(appName) as string)) return false;
 
-            using RegistryKey? startupApprovedKey = _useRegRoot.OpenSubKey(_startupApprovedRegPath, false);
-            if (startupApprovedKey?.GetValue(appName) is byte[] bytes) return bytes.FirstOrDefault() == 0x02;
+        using RegistryKey? startupApprovedKey = _useRegRoot.OpenSubKey(_startupApprovedRegPath, false);
+        if (startupApprovedKey?.GetValue(appName) is byte[] bytes) return bytes.FirstOrDefault() == 0x02;
 
-            // If there is no StartupApproved entry, consider it enabled
-            return true;
-        }
-        catch (Exception ex)
-        {
-            throw new AutoLaunchException("Check auto launch status via Windows Registry failed.", ex);
-        }
-    }
+        // If there is no StartupApproved entry, consider it enabled
+        return true;
+    });
 }
 
 internal sealed partial class WindowsRegistry
 {
-    public override Task EnableAsync() => Task.Run(Enable);
-    public override Task DisableAsync() => Task.Run(Disable);
-    public override Task<bool> IsEnabledAsync() => Task.Run(IsEnabled);
+    public override Task EnableAsync() => PermissionDeniedException.ThrowIfIOPermissionDeniedAsync(() => Task.Run(Enable));
+    public override Task DisableAsync() => PermissionDeniedException.ThrowIfIOPermissionDeniedAsync(() => Task.Run(Disable));
+    public override Task<bool> IsEnabledAsync() => PermissionDeniedException.ThrowIfIOPermissionDeniedAsync(() => Task.Run(IsEnabled));
 }
