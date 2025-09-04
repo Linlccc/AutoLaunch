@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace AutoLaunch.Compatibility;
+namespace AutoLaunch.Extensions;
 
 internal static class ArgumentEx
 {

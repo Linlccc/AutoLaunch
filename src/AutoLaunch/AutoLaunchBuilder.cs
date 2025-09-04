@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using AutoLaunch.Decorators;
 
 namespace AutoLaunch;
 
@@ -162,9 +163,10 @@ public sealed class AutoLaunchBuilder
         string appName = _appName!, appPath = _appPath!;
         _args ??= [];
 
+        AutoLauncher platformLauncher;
         if (OperatingSystemEx.IsWindows())
         {
-            return _windowsEngine switch
+            platformLauncher = _windowsEngine switch
             {
                 WindowsEngine.Registry => new WindowsRegistry(appName, appPath, _args.AsReadOnly(), _workScope),
                 WindowsEngine.StartupFolder => new WindowsStartupFolder(appName, appPath, _args.AsReadOnly(), _workScope),
@@ -172,24 +174,24 @@ public sealed class AutoLaunchBuilder
                 _ => throw new AutoLaunchBuilderException("Invalid Windows engine.")
             };
         }
-        if (OperatingSystemEx.IsLinux())
+        else if (OperatingSystemEx.IsLinux())
         {
-            return _linuxEngine switch
+            platformLauncher = _linuxEngine switch
             {
                 LinuxEngine.Freedesktop => new LinuxFreedesktop(appName, appPath, _args.AsReadOnly(), _workScope, _extraConfig),
                 _ => throw new AutoLaunchBuilderException("Invalid Linux engine.")
             };
         }
-        if (OperatingSystemEx.IsMacOS())
+        else if (OperatingSystemEx.IsMacOS())
         {
-            return _macOSEngine switch
+            platformLauncher = _macOSEngine switch
             {
                 MacOSEngine.AppleScript => new MacOSAppleScript(Path.GetFileNameWithoutExtension(appPath), appPath, _args.AsReadOnly()),
                 MacOSEngine.LaunchAgent => new MacOSLaunchAgent(appName, appPath, _args.AsReadOnly(), _workScope, _identifiers?.AsReadOnly(), _extraConfig),
                 _ => throw new AutoLaunchBuilderException("Invalid Windows engine.")
             };
         }
-
-        throw new UnsupportedOSException();
+        else throw new UnsupportedOSException();
+        return new ExceptionalUnifiedDecorator(platformLauncher);
     }
 }

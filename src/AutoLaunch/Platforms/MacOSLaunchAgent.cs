@@ -5,24 +5,39 @@ namespace AutoLaunch.Platforms;
 #endif
 internal sealed partial class MacOSLaunchAgent(string appName, string appPath, ReadOnlyCollection<string> args, WorkScope workScope, ReadOnlyCollection<string>? identifiers, string? extraConfig) : AutoLauncher
 {
-    private static readonly string _curUserLaunchAgentsDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library", "LaunchAgents");
-    private static readonly string _allUserLaunchAgentsDir = Path.Combine(Path.DirectorySeparatorChar.ToString(), "Library", "LaunchAgents");
-
-    private readonly string _useLaunchAgentsDir = workScope == WorkScope.CurrentUser ? _curUserLaunchAgentsDir : _allUserLaunchAgentsDir;
-    private string LaunchAgentFile => Path.Combine(_useLaunchAgentsDir, $"{identifiers?.FirstOrDefault() ?? appName}.plist");
-
-    public override void Enable() => FilterPermissionDenied(() =>
+    public override void Enable()
     {
         if (!Directory.Exists(_useLaunchAgentsDir)) Directory.CreateDirectory(_useLaunchAgentsDir);
         File.WriteAllText(LaunchAgentFile, GetLaunchAgentFileContent());
-    });
-    public override void Disable() => FilterPermissionDenied(() =>
+    }
+    public override void Disable()
     {
         if (File.Exists(LaunchAgentFile)) File.Delete(LaunchAgentFile);
-    });
+    }
     public override bool IsEnabled() => File.Exists(LaunchAgentFile);
 
-    #region private method
+
+    public override Task EnableAsync()
+    {
+        if (!Directory.Exists(_useLaunchAgentsDir)) Directory.CreateDirectory(_useLaunchAgentsDir);
+        return FileEx.WriteAllTextAsync(LaunchAgentFile, GetLaunchAgentFileContent());
+    }
+    public override Task DisableAsync()
+    {
+        if (File.Exists(LaunchAgentFile)) File.Delete(LaunchAgentFile);
+        return Task.CompletedTask;
+    }
+    public override Task<bool> IsEnabledAsync() => Task.FromResult(File.Exists(LaunchAgentFile));
+}
+
+internal sealed partial class MacOSLaunchAgent
+{
+    private static readonly string _curUserLaunchAgentsDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library", "LaunchAgents");
+    private static readonly string _allUserLaunchAgentsDir = Path.Combine(Path.DirectorySeparatorChar.ToString(), "Library", "LaunchAgents");
+    private readonly string _useLaunchAgentsDir = workScope == WorkScope.CurrentUser ? _curUserLaunchAgentsDir : _allUserLaunchAgentsDir;
+
+    private string LaunchAgentFile => Path.Combine(_useLaunchAgentsDir, $"{identifiers?.FirstOrDefault() ?? appName}.plist");
+
     private string GetLaunchAgentFileContent()
     {
         string[] programArgs = [appPath, ..args];
@@ -46,31 +61,4 @@ internal sealed partial class MacOSLaunchAgent(string appName, string appPath, R
                 </plist>
                 """;
     }
-
-    private static void FilterPermissionDenied(Action action)
-    {
-        try { action(); }
-        catch (UnauthorizedAccessException ex) { throw new PermissionDeniedException("Permission denied.", ex); }
-    }
-    private static async Task FilterPermissionDeniedAsync(Func<Task> func)
-    {
-        try { await func(); }
-        catch (UnauthorizedAccessException ex) { throw new PermissionDeniedException("Permission denied.", ex); }
-    }
-    #endregion
-}
-
-internal sealed partial class MacOSLaunchAgent
-{
-    public override Task EnableAsync() => FilterPermissionDeniedAsync(() =>
-    {
-        if (!Directory.Exists(_useLaunchAgentsDir)) Directory.CreateDirectory(_useLaunchAgentsDir);
-        return FileEx.WriteAllTextAsync(LaunchAgentFile, GetLaunchAgentFileContent());
-    });
-    public override Task DisableAsync() => FilterPermissionDeniedAsync(() =>
-    {
-        if (File.Exists(LaunchAgentFile)) File.Delete(LaunchAgentFile);
-        return Task.CompletedTask;
-    });
-    public override Task<bool> IsEnabledAsync() => Task.FromResult(File.Exists(LaunchAgentFile));
 }

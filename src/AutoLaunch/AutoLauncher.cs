@@ -1,5 +1,19 @@
 namespace AutoLaunch;
 
+public interface IAutoLauncher
+{
+    void Enable();
+    void Disable();
+    bool IsEnabled();
+}
+
+public interface IAsyncAutoLauncher
+{
+    Task EnableAsync();
+    Task DisableAsync();
+    Task<bool> IsEnabledAsync();
+}
+
 public abstract class AutoLauncher : IAutoLauncher, IAsyncAutoLauncher
 {
     public abstract void Enable();
