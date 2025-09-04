@@ -30,7 +30,6 @@
 
         <!-- You need to manually set IsPackable in the packaged project to true -->
         <IsPackable>false</IsPackable>
-        <Title>$(AssemblyName)</Title>
         <PackageId>$(AssemblyName)</PackageId>
         <PackageReadmeFile Condition="Exists('README.md') Or Exists('$(SlnReadme)')">README.md</PackageReadmeFile>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
