@@ -33,6 +33,8 @@
 
 ### 修复
 
+- 对 `WindowsRegistry` 无权限时抛出的 `SecurityException` 做处理
+
 ### 移除
 
 ___
