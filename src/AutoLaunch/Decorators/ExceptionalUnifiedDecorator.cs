@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using System.Security;
 
 namespace AutoLaunch.Decorators;
 
@@ -16,6 +17,8 @@ internal class ExceptionalUnifiedDecorator(AutoLauncher inner) : AutoLauncher
     private static T ExceptionUnified<T>(Func<T> func)
     {
         try { return func(); }
+        // Wrap SecurityException into PermissionDeniedException
+        catch (SecurityException secEx) { throw new PermissionDeniedException(innerException: secEx); }
         // Wrap UnauthorizedAccessException into PermissionDeniedException
         catch (UnauthorizedAccessException unAccEx) { throw new PermissionDeniedException(innerException: unAccEx); }
         // Wrap other exceptions into AutoLaunchException
@@ -25,6 +28,8 @@ internal class ExceptionalUnifiedDecorator(AutoLauncher inner) : AutoLauncher
     private static async Task<T> ExceptionUnifiedAsync<T>(Func<Task<T>> func)
     {
         try { return await func(); }
+        // Wrap SecurityException into PermissionDeniedException
+        catch (SecurityException secEx) { throw new PermissionDeniedException(innerException: secEx); }
         // Wrap UnauthorizedAccessException into PermissionDeniedException
         catch (UnauthorizedAccessException unAccEx) { throw new PermissionDeniedException(innerException: unAccEx); }
         // Wrap other exceptions into AutoLaunchException
