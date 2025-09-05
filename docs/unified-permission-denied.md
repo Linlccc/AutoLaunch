@@ -6,7 +6,9 @@
 ## 总结
 
 - Windows
-  - Registry - 抛出 `System.UnauthorizedAccessException`
+  - Registry
+    - 抛出 `System.UnauthorizedAccessException`
+    - 抛出 `System.Security.SecurityException` see:[source](https://github.com/dotnet/runtime/blob/30700fb260399015cb12bbea53869b621995b83a/src/libraries/Microsoft.Win32.Registry/src/Microsoft/Win32/RegistryKey.cs#L525-L530)
   - StartupFolder - 抛出 `System.UnauthorizedAccessException`
   - TaskScheduler - 错误消息包含HRESULT： `0x80070005`
 - Linux
@@ -50,3 +52,50 @@ else
     exit 1
 fi
 ```
+
+## 权限哪些情况下会出现权限被拒绝
+
+### Windows
+
+> `Registry` + `AllUser`
+
+- 非管理员权限执行启用
+- 非管理员权限执行禁用
+
+> `StartupFolder` + `AllUser`
+> 文件有更细粒度的控制权限
+
+- 没有特殊权限下
+  - 非管理员权限执行启用
+  - 非管理员权限执行禁用
+- 其他
+  - 对 `CommonStartup` 目录没有写入权限执行启动
+  - 对 `CommonStartup` 目录内容没有删除权限执行禁用
+  - 对 `CommonStartup` 目录内容没有读取权限执行状态检查
+
+> `TaskScheduler`
+> 任务计划中，如果没有读取权限，不管任务是否存在，状态检查动作永远返回 `false`，禁用动作永远成功(但是不会有任何动作)
+
+- 非管理员权限执行启用
+- 非管理员权限执行禁用
+
+### Linux
+
+> `Freedesktop` + `AllUser`
+> 在此不对细粒度权限控制做说明
+
+- 没有管理员权限执行启用
+- 没有管理员权限执行禁用
+
+### macOS
+
+> `LaunchAgent` + `AllUser`
+> 在此不对细粒度权限控制做说明
+
+- 没有管理员权限执行启用
+- 没有管理员权限执行禁用
+
+> `AppleScript`
+
+- 没有自动化权限执行启用
+- 没有自动化权限执行禁用
