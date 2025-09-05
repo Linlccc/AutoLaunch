@@ -21,7 +21,7 @@
     </PropertyGroup>
 
     <PropertyGroup Label="package metadata">
-        <version>1.0.0-preview.4</version>
+        <version>1.0.0</version>
         <PackageIcon>icon.png</PackageIcon>
         <PackageTags>autolaunch autostart</PackageTags>
         <PackageProjectUrl>https://github.com/Linlccc/AutoLaunch</PackageProjectUrl>
