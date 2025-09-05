@@ -42,7 +42,7 @@ internal sealed partial class WindowsStartupFolder
          REM Auto-generated batch file for auto-launch
          cd /d "{Path.GetDirectoryName(appPath)}"
          REM start : start "title" /d "exeFolder" "exePath" "arg1" arg2 ...
-         start "{appName}" /d "{Path.GetDirectoryName(appPath)}" "{appPath}" {ArgumentEx.EscapeArguments(args)}
+         start "{appName}" /d "{Path.GetDirectoryName(appPath)}" {ArgumentEx.EscapeArguments([appPath, ..args])}
          exit
          """;
 }
