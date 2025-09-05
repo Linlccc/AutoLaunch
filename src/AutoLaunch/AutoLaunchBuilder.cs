@@ -3,6 +3,9 @@ using AutoLaunch.Decorators;
 
 namespace AutoLaunch;
 
+/// <summary>
+/// Builder for creating <see cref="AutoLauncher"/> instances.
+/// </summary>
 public sealed class AutoLaunchBuilder
 {
     #region field
@@ -20,6 +23,10 @@ public sealed class AutoLaunchBuilder
     private string? _extraConfig;
     #endregion
 
+    /// <summary>
+    /// Automatically configure the builder using the current application's settings.
+    /// </summary>
+    /// <returns>Returns the current <see cref="AutoLaunchBuilder"/> instance.</returns>
     public AutoLaunchBuilder Automatic()
     {
         _appPath ??= EnvironmentEx.ProcessPath;
@@ -32,12 +39,22 @@ public sealed class AutoLaunchBuilder
         return this;
     }
 
+    /// <summary>
+    /// Sets the name of the auto-launch item.
+    /// </summary>
+    /// <param name="appName">The name to set.</param>
+    /// <returns>Returns the current <see cref="AutoLaunchBuilder"/> instance.</returns>
     public AutoLaunchBuilder SetAppName(string appName)
     {
         _appName = appName;
         return this;
     }
 
+    /// <summary>
+    /// Sets the path of the auto-launch item.
+    /// </summary>
+    /// <param name="appPath">The path to set.</param>
+    /// <returns>Returns the current <see cref="AutoLaunchBuilder"/> instance.</returns>
     public AutoLaunchBuilder SetAppPath(string appPath)
     {
         _appPath = appPath;
@@ -58,6 +75,14 @@ public sealed class AutoLaunchBuilder
         return this;
     }
 
+    /// <summary>
+    /// Adds arguments for the auto-launch item.
+    /// </summary>
+    /// <param name="args">The arguments to add.</param>
+    /// <returns>Returns the current <see cref="AutoLaunchBuilder"/> instance.</returns>
+    /// <remarks>
+    /// Only --hidden and --minimized arguments are effective in the <see cref="MacOSEngine.AppleScript">AppleScript</see> engine.
+    /// </remarks>
     public AutoLaunchBuilder AddArgs(params IEnumerable<string> args)
     {
         _args ??= [];
@@ -86,18 +111,33 @@ public sealed class AutoLaunchBuilder
         return this;
     }
 
+    /// <summary>
+    /// Sets the Windows engine type for the auto-launch item. The default value is <see cref="WindowsEngine.Registry">Registry</see>.
+    /// </summary>
+    /// <param name="engine">The Windows engine type to set.</param>
+    /// <returns>Returns the current <see cref="AutoLaunchBuilder"/> instance.</returns>
     public AutoLaunchBuilder SetWindowsEngine(WindowsEngine engine)
     {
         _windowsEngine = engine;
         return this;
     }
 
+    /// <summary>
+    /// Sets the Linux engine type for the auto-launch item. The default value is <see cref="LinuxEngine.Freedesktop">Freedesktop</see>.
+    /// </summary>
+    /// <param name="engine">The Linux engine type to set.</param>
+    /// <returns>Returns the current <see cref="AutoLaunchBuilder"/> instance.</returns>
     public AutoLaunchBuilder SetLinuxEngine(LinuxEngine engine)
     {
         _linuxEngine = engine;
         return this;
     }
 
+    /// <summary>
+    /// Sets the macOS engine type for the auto-launch item. The default value is <see cref="MacOSEngine.LaunchAgent">LaunchAgent</see>.
+    /// </summary>
+    /// <param name="engine">The macOS engine type to set.</param>
+    /// <returns>Returns the current <see cref="AutoLaunchBuilder"/> instance.</returns>
     public AutoLaunchBuilder SetMacOSEngine(MacOSEngine engine)
     {
         _macOSEngine = engine;
@@ -121,6 +161,17 @@ public sealed class AutoLaunchBuilder
         return this;
     }
 
+    /// <summary>
+    /// Adds identifiers for the auto-launch item.
+    /// </summary>
+    /// <param name="identifiers">The identifiers to add.</param>
+    /// <returns>Returns the current <see cref="AutoLaunchBuilder"/> instance.</returns>
+    /// <remarks>
+    /// Only effective when using the following engines:
+    /// <list type="table">
+    ///     <item><see cref="MacOSEngine.LaunchAgent"/></item>
+    /// </list>
+    /// </remarks>
     public AutoLaunchBuilder AddIdentifiers(params IEnumerable<string> identifiers)
     {
         _identifiers ??= [];
@@ -147,6 +198,20 @@ public sealed class AutoLaunchBuilder
         return this;
     }
 
+    /// <summary>
+    /// Conditionally sets extra configuration for the auto-launch item.
+    /// </summary>
+    /// <param name="condition">The condition to evaluate.</param>
+    /// <param name="extraConfig">extra configuration</param>
+    /// <returns>Returns the current <see cref="AutoLaunchBuilder"/> instance.</returns>
+    /// <remarks>
+    /// Only effective when using the following engines:
+    /// <list type="table">
+    ///     <item><see cref="MacOSEngine.LaunchAgent"/></item>
+    ///     <item><see cref="LinuxEngine.Freedesktop"/></item>
+    /// </list>
+    /// The format of the extra configuration should comply with the specifications of the respective engine.
+    /// </remarks>
     public AutoLaunchBuilder SetExtraConfigIf(bool condition, string extraConfig)
     {
         if (condition) _extraConfig = extraConfig;
@@ -154,12 +219,18 @@ public sealed class AutoLaunchBuilder
     }
 
 
+    /// <summary>
+    /// Builds and returns an instance of <see cref="AutoLauncher"/> based on the configured settings.
+    /// </summary>
+    /// <returns>An instance of <see cref="AutoLauncher"/>.</returns>
+    /// <exception cref="AutoLaunchBuilderException">Thrown when required parameters are missing or invalid.</exception>
+    /// <exception cref="UnsupportedOSException">Thrown when the operating system is unsupported.</exception>
     [SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "Handled internally")]
     public AutoLauncher Build()
     {
         if (string.IsNullOrWhiteSpace(_appName)) throw new AutoLaunchBuilderException("AppName is required.");
         if (string.IsNullOrWhiteSpace(_appPath)) throw new AutoLaunchBuilderException("AppPath is required.");
-        if (!Path.IsPathRooted(_appPath)) throw new AutoLaunchException($"AppPath '{_appPath}' is not absolute.");
+        if (!Path.IsPathRooted(_appPath)) throw new AutoLaunchBuilderException($"AppPath '{_appPath}' is not absolute.");
         string appName = _appName!, appPath = _appPath!;
         _args ??= [];
 
@@ -195,5 +266,9 @@ public sealed class AutoLaunchBuilder
         return new ExceptionalUnifiedDecorator(platformLauncher);
     }
 
+    /// <summary>
+    /// Builds and returns a <see cref="SafeAutoLauncher"/> instance that does not throw exceptions.
+    /// </summary>
+    /// <returns>A <see cref="SafeAutoLauncher"/> instance.</returns>
     public SafeAutoLauncher BuildSafe() => new SafeDecorator(Build());
 }
