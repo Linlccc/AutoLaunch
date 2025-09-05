@@ -14,10 +14,11 @@
 
 ---
 
-## Next
+## v1.0.0
 
 ### 新增
 
+- README
 - 添加 `ExceptionalUnifiedDecorator` 异常装饰器，统一处理异常消息
 - 添加 `SafeAutoLauncher` 安全启动器，不会抛出异常
 - 添加 `SafeDecorator` 安全装饰器，实现 `SafeAutoLauncher`
@@ -30,6 +31,8 @@
 - 开放 `IAsyncAutoLauncher` 接口
 
 ### 优化
+
+- 为项目添加文档注释
 
 ### 修复
 
