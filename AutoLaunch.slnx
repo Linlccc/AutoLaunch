@@ -1,9 +1,10 @@
 ﻿<Solution>
     <Folder Name="/files/">
-        <File Path="README.md"/>
-        <File Path=".editorconfig"/>
         <File Path=".gitignore"/>
+        <File Path=".editorconfig"/>
         <File Path="Directory.Build.props"/>
+        <File Path="README.md"/>
+        <File Path="README-ZH_CN.md"/>
     </Folder>
     <Folder Name="/files/docs/">
         <File Path="docs/dev.md"/>
@@ -14,12 +15,5 @@
         <File Path=".github/workflows/push-nuget.yml"/>
         <File Path=".github/workflows/release.yml"/>
     </Folder>
-    <Folder Name="/files/github_issue_temp/">
-        <File Path=".github/ISSUE_TEMPLATE/bug-report.yml"/>
-        <File Path=".github/ISSUE_TEMPLATE/bug-report-zh.yml"/>
-        <File Path=".github/ISSUE_TEMPLATE/feature-request.yml"/>
-        <File Path=".github/ISSUE_TEMPLATE/feature-request-zh.yml"/>
-    </Folder>
-
     <Project Path="src\AutoLaunch\AutoLaunch.csproj" Type="Classic C#"/>
 </Solution>
