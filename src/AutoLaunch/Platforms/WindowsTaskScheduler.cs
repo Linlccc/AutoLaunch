@@ -9,12 +9,12 @@ internal sealed partial class WindowsTaskScheduler(string appName, string appPat
 {
     public override void Enable() => Exec(GetEnableCmd());
     public override void Disable() => Exec(GetDisableCmd());
-    public override bool IsEnabled() => string.Equals("true", Exec(GetIsEnabledCmd()), StringComparison.OrdinalIgnoreCase);
+    public override bool GetStatus() => string.Equals("true", Exec(GetIsEnabledCmd()), StringComparison.OrdinalIgnoreCase);
 
 
     public override Task EnableAsync() => ExecAsync(GetEnableCmd());
     public override Task DisableAsync() => ExecAsync(GetDisableCmd());
-    public override async Task<bool> IsEnabledAsync() => string.Equals("true", await ExecAsync(GetIsEnabledCmd()), StringComparison.OrdinalIgnoreCase);
+    public override async Task<bool> GetStatusAsync() => string.Equals("true", await ExecAsync(GetIsEnabledCmd()), StringComparison.OrdinalIgnoreCase);
 }
 
 internal sealed partial class WindowsTaskScheduler

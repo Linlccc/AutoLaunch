@@ -16,10 +16,10 @@ public interface IAutoLauncher
     void Disable();
 
     /// <summary>
-    /// Checks whether the auto-launch feature is enabled.
+    /// Gets whether the auto-launch feature is enabled.
     /// </summary>
     /// <returns>True if enabled; otherwise, false.</returns>
-    bool IsEnabled();
+    bool GetStatus();
 }
 
 /// <summary>
@@ -40,10 +40,10 @@ public interface IAsyncAutoLauncher
     Task DisableAsync();
 
     /// <summary>
-    /// Checks whether the auto-launch feature is enabled asynchronously.
+    /// Gets whether the auto-launch feature is enabled asynchronously.
     /// </summary>
     /// <returns>A task that represents the asynchronous operation. The result indicates whether it is enabled.</returns>
-    Task<bool> IsEnabledAsync();
+    Task<bool> GetStatusAsync();
 }
 
 /// <summary>
@@ -62,10 +62,10 @@ public abstract class AutoLauncher : IAutoLauncher, IAsyncAutoLauncher
     public abstract void Disable();
 
     /// <summary>
-    /// Checks whether the auto-launch feature is enabled.
+    /// Gets whether the auto-launch feature is enabled.
     /// </summary>
     /// <returns>True if enabled; otherwise, false.</returns>
-    public abstract bool IsEnabled();
+    public abstract bool GetStatus();
 
     /// <summary>
     /// Enables the auto-launch feature asynchronously.
@@ -80,10 +80,10 @@ public abstract class AutoLauncher : IAutoLauncher, IAsyncAutoLauncher
     public abstract Task DisableAsync();
 
     /// <summary>
-    /// Checks whether the auto-launch feature is enabled asynchronously.
+    /// Gets whether the auto-launch feature is enabled asynchronously.
     /// </summary>
     /// <returns>A task that represents the asynchronous operation. The result indicates whether it is enabled.</returns>
-    public abstract Task<bool> IsEnabledAsync();
+    public abstract Task<bool> GetStatusAsync();
 
     /// <summary>
     /// Checks whether the current operating system is supported for auto-launch functionality.
@@ -111,13 +111,13 @@ public abstract class SafeAutoLauncher : AutoLauncher
     public abstract bool TryDisable();
 
     /// <summary>
-    /// Attempts to check whether auto-launch is enabled.
+    /// Attempts to gets whether auto-launch is enabled.
     /// </summary>
     /// <returns>
     /// success indicates whether the operation was successful;
     /// enabled indicates whether auto-launch is currently enabled.
     /// </returns>
-    public abstract (bool success, bool enabled) TryIsEnabled();
+    public abstract (bool success, bool enabled) TryGetStatus();
 
     /// <summary>
     /// Asynchronously attempts to enable auto-launch.
@@ -132,14 +132,14 @@ public abstract class SafeAutoLauncher : AutoLauncher
     public abstract Task<bool> TryDisableAsync();
 
     /// <summary>
-    /// Asynchronously attempts to check whether auto-launch is enabled.
+    /// Asynchronously attempts to gets whether auto-launch is enabled.
     /// </summary>
     /// <returns>
     /// A task whose result is a tuple:
     /// success indicates whether the operation was successful;
     /// enabled indicates whether auto-launch is currently enabled.
     /// </returns>
-    public abstract Task<(bool success, bool enabled)> TryIsEnabledAsync();
+    public abstract Task<(bool success, bool enabled)> TryGetStatusAsync();
 
     /// <summary>
     /// Gets the exception from the most recent operation, or null if there was no exception.

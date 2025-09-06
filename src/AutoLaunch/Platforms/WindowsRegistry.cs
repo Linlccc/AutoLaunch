@@ -23,7 +23,7 @@ internal sealed partial class WindowsRegistry(string appName, string appPath, Re
         using RegistryKey? startupApprovedKey = _useRegRoot.OpenSubKey(_startupApprovedRegPath, true);
         startupApprovedKey?.DeleteValue(appName, false);
     }
-    public override bool IsEnabled()
+    public override bool GetStatus()
     {
         using RegistryKey? runKey = _useRegRoot.OpenSubKey(_runRegPath, false);
         if (string.IsNullOrWhiteSpace(runKey?.GetValue(appName) as string)) return false;
@@ -38,7 +38,7 @@ internal sealed partial class WindowsRegistry(string appName, string appPath, Re
 
     public override Task EnableAsync() => Task.Run(Enable);
     public override Task DisableAsync() => Task.Run(Disable);
-    public override Task<bool> IsEnabledAsync() => Task.Run(IsEnabled);
+    public override Task<bool> GetStatusAsync() => Task.Run(GetStatus);
 }
 
 internal sealed partial class WindowsRegistry

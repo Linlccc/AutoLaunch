@@ -7,10 +7,10 @@ internal class ExceptionalUnifiedDecorator(AutoLauncher inner) : AutoLauncher
 {
     public override void Enable() => ExceptionUnified(inner.Enable);
     public override void Disable() => ExceptionUnified(inner.Disable);
-    public override bool IsEnabled() => ExceptionUnified(inner.IsEnabled);
+    public override bool GetStatus() => ExceptionUnified(inner.GetStatus);
     public override Task EnableAsync() => ExceptionUnifiedAsync(inner.EnableAsync);
     public override Task DisableAsync() => ExceptionUnifiedAsync(inner.DisableAsync);
-    public override Task<bool> IsEnabledAsync() => ExceptionUnifiedAsync(inner.IsEnabledAsync);
+    public override Task<bool> GetStatusAsync() => ExceptionUnifiedAsync(inner.GetStatusAsync);
 
     #region private method
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

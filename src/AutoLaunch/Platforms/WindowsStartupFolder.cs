@@ -14,7 +14,7 @@ internal sealed partial class WindowsStartupFolder(string appName, string appPat
     {
         if (File.Exists(BatchFilePath)) File.Delete(BatchFilePath);
     }
-    public override bool IsEnabled() => File.Exists(BatchFilePath);
+    public override bool GetStatus() => File.Exists(BatchFilePath);
 
 
     public override Task EnableAsync()
@@ -27,7 +27,7 @@ internal sealed partial class WindowsStartupFolder(string appName, string appPat
         if (File.Exists(BatchFilePath)) File.Delete(BatchFilePath);
         return Task.CompletedTask;
     }
-    public override Task<bool> IsEnabledAsync() => Task.FromResult(File.Exists(BatchFilePath));
+    public override Task<bool> GetStatusAsync() => Task.FromResult(File.Exists(BatchFilePath));
 }
 
 internal sealed partial class WindowsStartupFolder

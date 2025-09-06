@@ -14,7 +14,7 @@ internal sealed partial class MacOSLaunchAgent(string appName, string appPath, R
     {
         if (File.Exists(LaunchAgentFile)) File.Delete(LaunchAgentFile);
     }
-    public override bool IsEnabled() => File.Exists(LaunchAgentFile);
+    public override bool GetStatus() => File.Exists(LaunchAgentFile);
 
 
     public override Task EnableAsync()
@@ -27,7 +27,7 @@ internal sealed partial class MacOSLaunchAgent(string appName, string appPath, R
         if (File.Exists(LaunchAgentFile)) File.Delete(LaunchAgentFile);
         return Task.CompletedTask;
     }
-    public override Task<bool> IsEnabledAsync() => Task.FromResult(File.Exists(LaunchAgentFile));
+    public override Task<bool> GetStatusAsync() => Task.FromResult(File.Exists(LaunchAgentFile));
 }
 
 internal sealed partial class MacOSLaunchAgent

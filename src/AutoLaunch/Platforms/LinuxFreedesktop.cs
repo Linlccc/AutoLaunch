@@ -14,7 +14,7 @@ internal sealed partial class LinuxFreedesktop(string appName, string appPath, R
     {
         if (File.Exists(AutoStartFile)) File.Delete(AutoStartFile);
     }
-    public override bool IsEnabled() => File.Exists(AutoStartFile);
+    public override bool GetStatus() => File.Exists(AutoStartFile);
 
 
     public override Task EnableAsync()
@@ -27,7 +27,7 @@ internal sealed partial class LinuxFreedesktop(string appName, string appPath, R
         if (File.Exists(AutoStartFile)) File.Delete(AutoStartFile);
         return Task.CompletedTask;
     }
-    public override Task<bool> IsEnabledAsync() => Task.FromResult(File.Exists(AutoStartFile));
+    public override Task<bool> GetStatusAsync() => Task.FromResult(File.Exists(AutoStartFile));
 }
 
 internal sealed partial class LinuxFreedesktop

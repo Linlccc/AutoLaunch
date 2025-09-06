@@ -9,12 +9,12 @@ internal sealed partial class MacOSAppleScript(string appName, string appPath, R
 {
     public override void Enable() => Exec(GetEnableScript());
     public override void Disable() => Exec(GetDisableScript());
-    public override bool IsEnabled() => string.Equals("true", Exec(GetIsEnabledScript()), StringComparison.OrdinalIgnoreCase);
+    public override bool GetStatus() => string.Equals("true", Exec(GetIsEnabledScript()), StringComparison.OrdinalIgnoreCase);
 
 
     public override Task EnableAsync() => ExecAsync(GetEnableScript());
     public override Task DisableAsync() => ExecAsync(GetDisableScript());
-    public override async Task<bool> IsEnabledAsync() => string.Equals("true", await ExecAsync(GetIsEnabledScript()), StringComparison.OrdinalIgnoreCase);
+    public override async Task<bool> GetStatusAsync() => string.Equals("true", await ExecAsync(GetIsEnabledScript()), StringComparison.OrdinalIgnoreCase);
 }
 
 internal sealed partial class MacOSAppleScript

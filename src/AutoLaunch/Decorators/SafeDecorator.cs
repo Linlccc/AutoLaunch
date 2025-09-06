@@ -6,18 +6,18 @@ internal class SafeDecorator(AutoLauncher inner) : SafeAutoLauncher
 
     public override void Enable() => inner.Enable();
     public override void Disable() => inner.Disable();
-    public override bool IsEnabled() => inner.IsEnabled();
+    public override bool GetStatus() => inner.GetStatus();
     public override Task EnableAsync() => inner.EnableAsync();
     public override Task DisableAsync() => inner.DisableAsync();
-    public override Task<bool> IsEnabledAsync() => inner.IsEnabledAsync();
+    public override Task<bool> GetStatusAsync() => inner.GetStatusAsync();
 
 
     public override bool TryEnable() => SafeExecute(Enable);
     public override bool TryDisable() => SafeExecute(Disable);
-    public override (bool, bool) TryIsEnabled() => SafeExecute(IsEnabled);
+    public override (bool, bool) TryGetStatus() => SafeExecute(GetStatus);
     public override Task<bool> TryEnableAsync() => SafeExecuteAsync(EnableAsync);
     public override Task<bool> TryDisableAsync() => SafeExecuteAsync(DisableAsync);
-    public override Task<(bool, bool)> TryIsEnabledAsync() => SafeExecuteAsync(IsEnabledAsync);
+    public override Task<(bool, bool)> TryGetStatusAsync() => SafeExecuteAsync(GetStatusAsync);
 
     public override Exception? TakeLastException()
     {
