@@ -84,6 +84,12 @@ public abstract class AutoLauncher : IAutoLauncher, IAsyncAutoLauncher
     /// </summary>
     /// <returns>A task that represents the asynchronous operation. The result indicates whether it is enabled.</returns>
     public abstract Task<bool> IsEnabledAsync();
+
+    /// <summary>
+    /// Checks whether the current operating system is supported for auto-launch functionality.
+    /// </summary>
+    /// <returns>True if supported; otherwise, false.</returns>
+    public static bool IsSupported() => OperatingSystemEx.IsWindows() || OperatingSystemEx.IsLinux() || OperatingSystemEx.IsMacOS();
 }
 
 /// <summary>
