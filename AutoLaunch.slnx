@@ -15,5 +15,5 @@
         <File Path=".github/workflows/push-nuget.yml"/>
         <File Path=".github/workflows/release.yml"/>
     </Folder>
-    <Project Path="src\AutoLaunch\AutoLaunch.csproj" Type="Classic C#"/>
+    <Project Path="src\AutoLaunch.csproj" Type="Classic C#"/>
 </Solution>
