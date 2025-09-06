@@ -2,50 +2,27 @@
 
 ![AutoLaunch](https://raw.githubusercontent.com/Linlccc/AutoLaunch/master/docs/icon/icon-128x128.png)
 
-English | [简体中文](https://github.com/Linlccc/AutoLaunch/blob/master/README-ZH_CN.md)
-
 [![GitHub repo size](https://img.shields.io/github/repo-size/Linlccc/AutoLaunch)](https://github.com/Linlccc/AutoLaunch)
 [![GitHub License](https://img.shields.io/github/license/Linlccc/AutoLaunch)](https://github.com/Linlccc/AutoLaunch/blob/master/LICENSE)
 [![NuGet Version](https://img.shields.io/nuget/v/AutoLaunch?label=AutoLaunch&logo=dotnet)](https://www.nuget.org/packages/AutoLaunch)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/AutoLaunch?label=AutoLaunch)](https://www.nuget.org/packages/AutoLaunch)
 [![AutoLaunchTestTool](https://img.shields.io/badge/AutoLaunchTestTool-0D6EFD)](https://github.com/Linlccc/AutoLaunchTestTool)
 
-[AutoLaunch](https://github.com/Linlccc/AutoLaunch) is a cross-platform .NET library that provides a unified API for configuring application / executable auto-start behavior on Windows, Linux, and macOS.
+[English](https://github.com/Linlccc/AutoLaunch/blob/master/README.md) | 简体中文
 
-A graphical test utility built with [Avalonia](https://avaloniaui.net/), [AutoLaunchTestTool](https://github.com/Linlccc/AutoLaunchTestTool), is available to help you quickly verify and experiment with auto-start functionality.
+[AutoLaunch](https://github.com/Linlccc/AutoLaunch) provides the ability to automatically run any application or executable at startup or login, supporting Windows, Linux, and macOS systems.
+
+[AutoLaunchTestTool](https://github.com/Linlccc/AutoLaunchTestTool) is a graphical test tool for this project based on [Avalonia](https://avaloniaui.net/), helping you quickly verify and experiment with auto-launch features.
 
 ## ✨ Features
 
-- 🌍 Cross-platform: Windows, Linux, macOS
-- 🔧 Multiple engines: Several mechanisms per platform
-- 🎯 Unified API: Same usage pattern across all platforms
-- 🛠 AOT friendly: Fully supports trimming and native AOT
-- 📦 Zero dependencies: No third-party runtime requirements
+- 🌍 **Cross-Platform Support**: Windows, Linux, macOS
+- 🔧 **Multiple Engines**: Multiple implementations for each platform
+- 🎯 **Ease of Use**: Unified API for all platforms
+- 🧱 **AOT Support**: Fully supports AOT and trimming
+- 📦 **Zero Dependencies**: No third-party library dependencies
 
-## 🚚 Supported Engines
-
-### Windows
-
-| Engine            | Description                         | Permission | Notes                                  |
-|-------------------|-------------------------------------|------------|----------------------------------------|
-| **Registry**      | Uses Run / RunOnce registry entries | User/Admin |                                        |
-| **StartupFolder** | Uses Startup folder shortcut        | User/Admin |                                        |
-| **TaskScheduler** | Uses Windows Task Scheduler         | Admin      | Can start programs requiring elevation |
-
-### Linux
-
-| Engine          | Description                                          | Permission | Notes                                            |
-|-----------------|------------------------------------------------------|------------|--------------------------------------------------|
-| **Freedesktop** | Creates a .desktop autostart entry (XDG/Freedesktop) | User/Admin | Requires a Freedesktop-compliant desktop session |
-
-### macOS
-
-| Engine          | Description                       | Permission         | Notes                                                     |
-|-----------------|-----------------------------------|--------------------|-----------------------------------------------------------|
-| **LaunchAgent** | Uses Launch Agent plist entry     | User/Admin         |                                                           |
-| **AppleScript** | Adds a login item via AppleScript | Automation consent | Only supports `--hidden` / `--minimize` argument patterns |
-
-## 📦 Installation
+## Installation
 
 dotnet CLI:
 
@@ -61,29 +38,29 @@ Install-Package AutoLaunch
 
 ## 🚀 Quick Start
 
-Unified configuration API across all platforms.
+`AutoLaunchBuilder` provides a unified configuration API for all platforms, eliminating constructor differences and enabling multi-platform configuration.
 
 ### Basic Usage
 
 ```csharp
 using AutoLaunch;
 
-// Automatically infer application name and path from current process
+// Auto configuration for current program
 var autoLauncher = new AutoLaunchBuilder().Automatic().Build();
 
-// Enable (sync)
+// Synchronous enable
 autoLauncher.Enable();
-// Disable (sync)
+// Synchronous disable
 autoLauncher.Disable();
-// Check if enabled (sync)
-bool isEnabled = autoLauncher.IsEnabled();
+// Synchronous status check
+bool enabled = autoLauncher.GetStatus();
 
-// Enable (async)
+// Asynchronous enable
 await autoLauncher.EnableAsync();
-// Disable (async)
+// Asynchronous disable
 await autoLauncher.DisableAsync();
-// Check if enabled (async)
-bool isEnabledAsync = await autoLauncher.IsEnabledAsync();
+// Asynchronous status check
+bool enabled = await autoLauncher.GetStatusAsync();
 ```
 
 ### Custom Configuration
@@ -94,13 +71,13 @@ var autoLauncher = new AutoLaunchBuilder()
     .SetAppPath("/path/to/myapp")
     .SetArgs("arg1", "arg2")
     .AddArgs("arg3")
-    .SetWorkScope(WorkScope.CurrentUser) // Choose scope for auto-start
-    .SetWindowsEngine(WindowsEngine.Registry) // Applies only on Windows
-    .SetLinuxEngine(LinuxEngine.Freedesktop) // Applies only on Linux
-    .SetMacOSEngine(MacOSEngine.LaunchAgent) // Applies only on macOS
-    .SetIdentifiers("com.example.myapp") // macOS bundle identifiers (LaunchAgent)
-    .SetExtraConfigIf(OperatingSystem.IsLinux(), "X-GNOME-Autostart-enabled=true") // Linux-only extra config (Freedesktop spec compliant)
-    .SetExtraConfigIf(OperatingSystem.IsMacOS(), "<key>KeepAlive</key><true/>") // macOS LaunchAgent-only extra plist fragment
+    .SetWorkScope(WorkScope.CurrentUser) // Set work scope for auto-launch
+    .SetWindowsEngine(WindowsEngine.Registry) // Use Registry on Windows, ignored on other platforms
+    .SetLinuxEngine(LinuxEngine.Freedesktop) // Use Freedesktop on Linux, ignored on other platforms
+    .SetMacOSEngine(MacOSEngine.AppleScript) // Use AppleScript on macOS, ignored on other platforms
+    .SetIdentifiers("com.example.myapp") // Add Bundle Identifier for macOS
+    .SetExtraConfigIf(OperatingSystem.IsLinux(), "X-GNOME-Autostart-enabled=true") // Add extra config for Linux (Freedesktop standard)
+    .SetExtraConfigIf(OperatingSystem.IsMacOS(), "<key>KeepAlive</key><true/>") // Add extra config for macOS (LaunchAgent standard)
     .Build();
 
 autoLauncher.Enable();
@@ -108,79 +85,124 @@ autoLauncher.Enable();
 
 ### Safe Mode
 
-In safe mode, no exceptions are thrown directly; you query the result state.
+Exceptions will not be thrown actively in safe mode.
 
 ```csharp
-// Build a safe-mode launcher
+// Build a safe mode instance
 var autoLauncher = new AutoLaunchBuilder().Automatic().BuildSafe();
 
-// Try to enable; returns true/false
+// Try to enable, returns true/false for success/failure
 bool success = autoLauncher.TryEnable();
 
 if (!success)
 {
-    // Retrieve the last exception
+    // Get the last exception
     Exception? lastException = autoLauncher.TakeLastException();
     if (lastException is PermissionDeniedException) Console.WriteLine("Permission denied.");
-    else Console.WriteLine($"Failed to enable auto-launch: {lastException?.Message}");
+    else Console.WriteLine($"Unable to enable auto launch: {lastException?.Message}");
 }
 ```
 
-## API Reference
+## 💡 Platform & Engine Details
+
+### Windows
+
+**Registry**
+
+Implements startup via registry entries.
+
+- `WorkScope.CurrentUser`: Creates registry entry under `HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run`.
+- `WorkScope.AllUser`: Creates registry entry under `HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run` (requires admin rights).
+
+**StartupFolder**
+
+Implements startup by adding `.bat` files to the Startup folder.
+
+- `WorkScope.CurrentUser`: Creates file in `C:\Users\[user]\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup`.
+- `WorkScope.AllUser`: Creates file in `C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup` (requires admin rights).
+
+**TaskScheduler**
+
+Implements startup via Task Scheduler, can start programs requiring admin rights (requires admin rights).
+
+### Linux
+
+**Freedesktop**
+
+Creates [Desktop entries (.desktop)](https://specifications.freedesktop.org/desktop-entry-spec/latest/) following the [FreeDesktop.org](https://www.freedesktop.org/wiki/) standard.
+
+- `WorkScope.CurrentUser`: Creates file under `~/.config/autostart/`.
+- `WorkScope.AllUser`: Creates file under `/etc/xdg/autostart/` (requires admin rights).
+
+### macOS
+
+**LaunchAgent**
+
+Creates `.plist` files following [Launch Agents](https://developer.apple.com/library/archive/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/CreatingLaunchdJobs.html).
+
+- `WorkScope.CurrentUser`: Creates file in `~/Library/LaunchAgents/`.
+- `WorkScope.AllUser`: Creates file in `/Library/LaunchAgents/` (requires admin rights).
+
+**AppleScript**
+
+Uses AppleScript via `System Events` to manage login items (needs automation permission).
+This engine only supports `--hidden` and `--minimized` arguments, and seems to be unsupported since macOS 13 (Ventura).
+
+## 📝 API Documentation
 
 ### AutoLaunchBuilder
 
-| Method                            | Description                               |
-|-----------------------------------|-------------------------------------------|
-| `Automatic()`                     | Automatically sets app name & path        |
-| `SetAppName(string)`              | Sets the application name                 |
-| `SetAppPath(string)`              | Sets the executable path                  |
-| `SetArgs(params string[])`        | Replaces all startup arguments            |
-| `AddArgs(params string[])`        | Appends additional startup arguments      |
-| `SetWorkScope(WorkScope)`         | Sets scope (current user / all users)     |
-| `SetWindowsEngine(WindowsEngine)` | Selects engine for Windows                |
-| `SetLinuxEngine(LinuxEngine)`     | Selects engine for Linux                  |
-| `SetMacOSEngine(MacOSEngine)`     | Selects engine for macOS                  |
-| `SetIdentifiers(params string[])` | Sets identifiers (macOS LaunchAgent only) |
-| `AddIdentifiers(params string[])` | Adds identifiers (macOS LaunchAgent only) |
-| `SetExtraConfig(string)`          | Sets extra raw config block               |
-| `SetExtraConfigIf(bool, string)`  | Conditionally sets an extra config block  |
-| `Build()`                         | Builds an `AutoLauncher`                  |
-| `BuildSafe()`                     | Builds a `SafeAutoLauncher`               |
+This type is used to build `AutoLauncher` or `SafeAutoLauncher` instances with chainable configuration methods.
+The configured engine can be set for all platforms, but only takes effect on the corresponding platform.
 
-### AutoLauncher Interface
+- **Automatic()** Automatically configures app name and path for the current program.
+- **SetAppName(string)** Set application name.
+- **SetAppPath(string)** Set application path.
+- **SetArgs(params string[])** Set startup arguments, overwriting previous args.
+- **AddArgs(params string[])** Add startup arguments.
+- **SetWorkScope(WorkScope)** Set scope (`WorkScope.CurrentUser`/`WorkScope.AllUser`).
+- **SetWindowsEngine(WindowsEngine)** Set Windows engine, see [Windows engines](#windows) for details.
+- **SetLinuxEngine(LinuxEngine)** Set Linux engine, see [Linux engines](#linux) for details.
+- **SetMacOSEngine(MacOSEngine)** Set macOS engine, see [macOS engines](#macos) for details.
+- **SetIdentifiers(params string[])** Set identifiers, for macOS `LaunchAgent` only.
+- **AddIdentifiers(params string[])** Add identifiers.
+- **SetExtraConfig(string)** Set extra config, must match corresponding engine's format. Only for Linux `Freedesktop` and macOS `LaunchAgent`.
+- **SetExtraConfigIf(bool, string)** Conditionally set extra config.
+- **Build()** Build an `AutoLauncher` instance.
+- **BuildSafe()** Build a `SafeAutoLauncher` instance.
 
-| Method             | Description                  |
-|--------------------|------------------------------|
-| `Enable()`         | Enables auto-start           |
-| `Disable()`        | Disables auto-start          |
-| `IsEnabled()`      | Checks if enabled            |
-| `EnableAsync()`    | Enables auto-start (async)   |
-| `DisableAsync()`   | Disables auto-start (async)  |
-| `IsEnabledAsync()` | Checks enabled state (async) |
+### AutoLauncher
 
-### SafeAutoLauncher Extra Methods
+- **Enable()** Enable auto launch.
+- **Disable()** Disable auto launch.
+- **GetStatus()** Get auto launch status.
+- **EnableAsync()** Enable auto launch asynchronously.
+- **DisableAsync()** Disable auto launch asynchronously.
+- **GetStatusAsync()** Get auto launch status asynchronously.
+- **IsSupported()** Check if the current OS supports auto launch.
 
-| Method                | Description                                       |
-|-----------------------|---------------------------------------------------|
-| `TryEnable()`         | Attempts enable; returns success/failure          |
-| `TryDisable()`        | Attempts disable; returns success/failure         |
-| `TryIsEnabled()`      | Attempts status check; returns (success, enabled) |
-| `TryEnableAsync()`    | Async variant                                     |
-| `TryDisableAsync()`   | Async variant                                     |
-| `TryIsEnabledAsync()` | Async variant                                     |
-| `TakeLastException()` | Retrieves the last thrown exception (if any)      |
+### SafeAutoLauncher
 
-## ⚠️ Exception Types
+Inherited from `AutoLauncher`, does not throw exceptions on failure, instead uses return values and last exception info.
 
-| Exception                    | Description                       |
-|------------------------------|-----------------------------------|
-| `AutoLaunchException`        | Base exception type               |
-| `AutoLaunchBuilderException` | Builder configuration error       |
-| `UnsupportedOSException`     | Unsupported operating system      |
-| `PermissionDeniedException`  | Permission denied                 |
-| `ExecuteCommandException`    | External command execution failed |
+- **TryEnable()** Try to enable, returns success/failure.
+- **TryDisable()** Try to disable, returns success/failure.
+- **TryGetStatus()** Try to check status, returns (success, enabled).
+- **TryEnableAsync()** Try to enable async.
+- **TryDisableAsync()** Try to disable async.
+- **TryGetStatusAsync()** Try to check status async, returns (success, enabled).
+- **TakeLastException()** Get last exception.
+
+## ⚠️ Exceptions
+
+| Exception                    | Description                         |
+|------------------------------|-------------------------------------|
+| `AutoLaunchException`        | Base exception for AutoLaunch       |
+| `AutoLaunchBuilderException` | Builder config error                |
+| `UnsupportedOSException`     | Unsupported OS                      |
+| `PermissionDeniedException`  | Permission denied                   |
+| `ExecuteCommandException`    | Thrown when command execution fails |
 
 ## 📜 License
 
-Released under the terms of the [MIT](LICENSE) License.
+Licensed under the [MIT](LICENSE) License.
