@@ -2,43 +2,39 @@
 
 ## Template
 
-### 新增
+### 修复
 
 ### 变更
 
-### 优化
+---
+
+## 1.0.1
 
 ### 修复
 
-### 移除
+- nuget 文档中的 README 图标和多语言链接错误
+
+### 变更
+
+- .net8.0 以下的版本添加源链接支持
+- 添加 `AutoLauncher.IsSupported()` 静态方法，检查当前平台是否受支持
+- 将 `IsEnabled` 修改成 `GetStatus`，异步和安全版本均同步修改
 
 ---
 
 ## v1.0.0
 
-### 新增
+### 修复
 
-- README
-- 添加 `ExceptionalUnifiedDecorator` 异常装饰器，统一处理异常消息
-- 添加 `SafeAutoLauncher` 安全启动器，不会抛出异常
-- 添加 `SafeDecorator` 安全装饰器，实现 `SafeAutoLauncher`
-- 添加 `AutoLaunchBuilder.BuildSafe` 方法，构建 `SafeAutoLauncher`
+- 修复使用 `WindowsEngine.Registry` 引擎时权限被拒绝抛出 `SecurityException` 而不是 `PermissionDeniedException` 的问题
 
 ### 变更
 
-- `AutoLaunch` 中抛出所有的异常继承自 `AutoLaunch.AutoLaunchException`
-- 开放 `IAutoLauncher` 接口
-- 开放 `IAsyncAutoLauncher` 接口
-
-### 优化
-
-- 为项目添加文档注释
-
-### 修复
-
-- 对 `WindowsRegistry` 无权限时抛出的 `SecurityException` 做处理
-
-### 移除
+- 添加不会抛出异常的安全启动器 `SafeAutoLauncher`，通过 `AutoLaunchBuilder.BuildSafe` 方法构建
+- `AutoLaunch` 中抛出的所有的异常继承自 `AutoLaunch.AutoLaunchException`
+- 开放 `IAutoLauncher`、`IAsyncAutoLauncher` 接口
+- 完成 README 和 README-ZH_CN 文档
+- 完成代码文档注释
 
 ___
 
@@ -50,29 +46,23 @@ ___
 
 ## v1.0.0-preview.3
 
-该版本用于测试工作流创建 Release。
-
-### 新增
+### 变更
 
 - 添加项目文档文件
-- 工作流自动发布一个默认 GitHub Release
 
 ---
 
 ## v1.0.0-preview.2
 
-### 新增
+### 修复
 
-- 添加 GitHub Issue 模板
+- 修复无权限时统一抛出 `AutoLaunch.Exceptions.PermissionDeniedException` 异常。 #1
 
 ### 变更
 
+- 添加 GitHub Issue 模板
 - 修改 icon 图标
-- `AutoLaunchBuilder.Build` 检查 `AppPath` 是否是绝对路径
-
-### 优化
-
-- 无权限时统一抛出 `AutoLaunch.Exceptions.PermissionDeniedException` 异常。 #1
+- `AutoLaunchBuilder.Build` 时检查 `AppPath` 是否是绝对路径
 
 ---
 
@@ -81,14 +71,12 @@ ___
 这是 AutoLaunch 的首个预览版本，已实现项目的核心功能。  
 **重要提示**：预览版可能包含不稳定 API 或行为变更，不建议直接用于生产环境。
 
-### 新增功能
+### 变更
 
-- Windows - 注册表自启动
-- Windows - 开始文件夹自启动
-- Windows - 任务计划自启动
-- Linux - Freedesktop 自启动
-- MacOS - LaunchAgent 自启动
-- MacOS - AppleScript 自启动
-- 多平台统一 API 调用
 - 完全支持 AOT 与裁剪
+- 多平台统一启动器构建 API
+- Windows - 注册表、开始文件夹、任务计划 实现自启动
+- Linux - Freedesktop 实现自启动
+- MacOS - LaunchAgent、AppleScript 实现自启动
+
 
