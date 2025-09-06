@@ -8,7 +8,7 @@
 [![NuGet Downloads](https://img.shields.io/nuget/dt/AutoLaunch?label=AutoLaunch)](https://www.nuget.org/packages/AutoLaunch)
 [![AutoLaunchTestTool](https://img.shields.io/badge/AutoLaunchTestTool-0D6EFD)](https://github.com/Linlccc/AutoLaunchTestTool)
 
-[English](https://github.com/Linlccc/AutoLaunch/blob/master/README.md) | 简体中文
+English | [简体中文](https://github.com/Linlccc/AutoLaunch/blob/master/README-ZH_CN.md)
 
 [AutoLaunch](https://github.com/Linlccc/AutoLaunch) provides the ability to automatically run any application or executable at startup or login, supporting Windows, Linux, and macOS systems.
 
