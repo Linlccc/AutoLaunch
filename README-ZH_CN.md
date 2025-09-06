@@ -1,14 +1,17 @@
 # AutoLaunch
 
-<img alt="AutoLaunch" src="https://raw.githubusercontent.com/Linlccc/AutoLaunch/master/docs/icon/icon.png" width="128">
+![AutoLaunch](https://raw.githubusercontent.com/Linlccc/AutoLaunch/master/docs/icon/icon-128x128.png)
 
-[English](README.md) | 简体中文
+[English](https://github.com/Linlccc/AutoLaunch/blob/master/README.md) | 简体中文
 
+[![GitHub repo size](https://img.shields.io/github/repo-size/Linlccc/AutoLaunch)](https://github.com/Linlccc/AutoLaunch)
+[![GitHub License](https://img.shields.io/github/license/Linlccc/AutoLaunch)](https://github.com/Linlccc/AutoLaunch/blob/master/LICENSE)
 [![NuGet Version](https://img.shields.io/nuget/v/AutoLaunch?label=AutoLaunch&logo=dotnet)](https://www.nuget.org/packages/AutoLaunch)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/AutoLaunch?label=AutoLaunch)](https://www.nuget.org/packages/AutoLaunch)
-[![GitHub License](https://img.shields.io/github/license/Linlccc/AutoLaunch)](https://github.com/Linlccc/AutoLaunch/blob/master/LICENSE)
+[![AutoLaunchTestTool](https://img.shields.io/badge/AutoLaunchTestTool-0D6EFD)](https://github.com/Linlccc/AutoLaunchTestTool)
 
 [AutoLaunch](https://github.com/Linlccc/AutoLaunch) 是一个跨平台的 .NET 库，提供了在 Windows、Linux 和 macOS 系统上实现应用程序和可执行文件自动启动的统一 API。
+该项目有一个使用 [Avalonia](https://avaloniaui.net/) 开发的图形界面测试工具 [AutoLaunchTestTool](https://github.com/Linlccc/AutoLaunchTestTool), 可以帮助你快速测试和验证自动启动功能。
 
 ## ✨ 特性
 
